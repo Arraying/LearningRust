@@ -36,17 +36,14 @@ fn get_digits_part2_remover(v: &mut String, result: &mut Vec<char>) {
     if v.is_empty() {
         return;
     }
-    let x = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+    let x = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
     for (i_minus_1, prefix) in x.iter().enumerate() {
-        match v.strip_prefix(prefix) {
-            Some(rest) => {
-                let the_char = char::from_digit((i_minus_1 + 1).try_into().unwrap(), 10).unwrap();
-                result.push(the_char);
-                let mut tail = String::from(rest);
-                get_digits_part2_remover(&mut tail, result);
-                return;
-            }
-            None => continue
+        if v.starts_with(prefix) {
+            let the_char = char::from_digit((i_minus_1 + 1).try_into().unwrap(), 10).unwrap();
+            result.push(the_char);
+            v.remove(0);
+            get_digits_part2_remover(v, result);
+            return;
         }
     }
     let popped = v.remove(0);
